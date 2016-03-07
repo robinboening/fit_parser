@@ -1,52 +1,45 @@
 require 'spec_helper'
 
 describe FitParser::File::Record do
-  before do
-    described_class.clear_definitions!
-    described_class.read(example_file('record/definition_record_2.fit'))
-  end
-
-  describe '.read' do
-    subject { described_class.read(file) }
-
+  describe '#read' do
     context 'given a sample definition record' do
-      let(:file) { example_file('record/definition_record') }
-
-      it { expect(subject.header).to be_a FitParser::File::RecordHeader }
-      it { expect(subject.content).to be_a FitParser::File::Definition }
-    end
-
-    context 'given a sample data record' do
-      let(:file) { nil }
+      it 'works' do
+        record = described_class.new({})
+        file = example_file('record/definition_record')
+        record.read(file)
+        expect(record.header).to be_a(FitParser::File::RecordHeader)
+        expect(record.content).to be_a(FitParser::File::Definition)
+      end
     end
 
     context 'given a sample data record with a string non null terminated' do
       context 'string length is equal to field size' do
-        let(:file) { example_file('record/data_record_2.fit') }
-
-        its(:header) { should be_a(FitParser::File::RecordHeader) }
-        it { expect(subject.content.raw_version).to be == 250 }
-        it { expect(subject.content.raw_part_number).to be == '123-A1234-00' }
+        it 'works' do
+          record = described_class.new({})
+          record.read(example_file('record/definition_record_2.fit'))
+          definitions = record.definitions
+          file = example_file('record/data_record_2.fit')
+          record = described_class.new(definitions).read(file)
+          expect(record.header).to be_a(FitParser::File::RecordHeader)
+          expect(record.content.raw_version).to eql(250)
+          expect(record.content.raw_part_number).to eql('123-A1234-00')
+        end
       end
 
-    context 'string length is smaller than field size' do
-        let(:file) { example_file('record/data_record_2bis.fit') }
-
-      its(:header) { should be_a(FitParser::File::RecordHeader) }
-      it { expect(subject.content.raw_version).to be == 251 }
-      it { expect(subject.content.version).to be == 2.51 }
-      it { expect(subject.content.raw_part_number).to be == '123-A1234' }
-      it { expect(subject.content.part_number).to be == '123-A1234' }
+      context 'string length is smaller than field size' do
+        it 'works' do
+          record = described_class.new({})
+          record.read(example_file('record/definition_record_2.fit'))
+          definitions = record.definitions
+          file = example_file('record/data_record_2bis.fit')
+          record = described_class.new(definitions).read(file)
+          expect(record.header).to be_a(FitParser::File::RecordHeader)
+          expect(record.content.raw_version).to eql(251)
+          expect(record.content.version).to eql(2.51)
+          expect(record.content.raw_part_number).to eql('123-A1234')
+          expect(record.content.part_number).to eql('123-A1234')
+        end
       end
-    end
-  end
-
-  describe '.clear_definitions' do
-    it 'should clear the definitions class variable' do
-      described_class.read example_file('record/definition_record')
-      expect(described_class.definitions).to_not be_empty
-      described_class.clear_definitions!
-      expect(described_class.definitions).to be_empty
     end
   end
 end

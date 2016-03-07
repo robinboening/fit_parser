@@ -12,15 +12,13 @@ module FitParser
 
     def read(io)
       @header = Header.read(io)
-
-      Record.clear_definitions!
-
+      definitions = {}
       while io.pos < @header.end_pos
-        @records << Record.read(io)
+        record = Record.new(definitions)
+        @records << record.read(io)
+        definitions = record.definitions
       end
-
       @crc = io.read(2)
-
       self
     end
   end
