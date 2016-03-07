@@ -14,6 +14,6 @@ require 'fit_parser/version'
 
 module FitParser
   def self.load_file(path)
-    File.read ::File.open(path)
+    File.read(::File.open(path))
   end
 end

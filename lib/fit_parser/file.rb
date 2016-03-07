@@ -1,6 +1,5 @@
 module FitParser
   class File
-
     def self.read(io)
       new.read(io)
     end
@@ -24,6 +23,5 @@ module FitParser
 
       self
     end
-
   end
 end

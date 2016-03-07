@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe FitParser::File::RecordHeader do
-  context "given a sample normal header" do
+  context 'given a sample normal header' do
     subject do
       described_class.read example_file('record/normal_header')
     end
@@ -14,7 +14,7 @@ describe FitParser::File::RecordHeader do
     it { is_expected.not_to be_a_compressed_timestamp }
   end
 
-  context "given a sample compressed timestamp header" do
+  context 'given a sample compressed timestamp header' do
     # TODO
   end
 end

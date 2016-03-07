@@ -10,7 +10,7 @@ module FitParser
       end
 
       def self.get_type(name)
-        return Type.types[name] if Type.types.has_key? name
+        return Type.types[name] if Type.types.key?(name)
         type = Types.get_type_definition name
         Type.types[name] = type ? new(type) : nil
       end
@@ -20,8 +20,8 @@ module FitParser
       end
 
       def value(val)
-        return nil unless is_valid(val)
-        if @type.has_key? :method
+        return nil unless valid?(val)
+        if @type.key?(:method)
           Types.send(@type[:method], val, @type[:values], @type[:parameters])
         else
           values = @type[:values]
@@ -32,15 +32,16 @@ module FitParser
       end
 
       private
-        def is_valid(val)
-          if @type.has_key? :invalid
-            invalid_value = @type[:invalid]
-          else
-            invalid_value = Types.get_type_definition(@type[:basic_type])[:invalid]
-          end
-          return false if val == invalid_value
-          true
+
+      def valid?(val)
+        if @type.key?(:invalid)
+          invalid_value = @type[:invalid]
+        else
+          invalid_value = Types.get_type_definition(@type[:basic_type])[:invalid]
         end
+        return false if val == invalid_value
+        true
+      end
     end
   end
 end
