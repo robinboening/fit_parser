@@ -1,0 +1,46 @@
+module FitParser
+  class File
+    class Type
+      def self.types
+        @types ||= {}
+      end
+
+      def self.types=(value)
+        @types = value
+      end
+
+      def self.get_type(name)
+        return Type.types[name] if Type.types.has_key? name
+        type = Types.get_type_definition name
+        Type.types[name] = type ? new(type) : nil
+      end
+
+      def initialize(type)
+        @type = type
+      end
+
+      def value(val)
+        return nil unless is_valid(val)
+        if @type.has_key? :method
+          Types.send(@type[:method], val, @type[:values], @type[:parameters])
+        else
+          values = @type[:values]
+          value = values[val] if values
+          return value unless value.nil?
+          val
+        end
+      end
+
+      private
+        def is_valid(val)
+          if @type.has_key? :invalid
+            invalid_value = @type[:invalid]
+          else
+            invalid_value = Types.get_type_definition(@type[:basic_type])[:invalid]
+          end
+          return false if val == invalid_value
+          true
+        end
+    end
+  end
+end
