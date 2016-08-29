@@ -18,7 +18,7 @@ module FitParser
             end
           RUBY
 
-          definition.fields.each do |field|
+          definition.fields_arr.each do |field|
             code = ''
 
             # in case the field size is a multiple of the field length, we must build an array

@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    fit_parser (0.0.5)
+    fit_parser (0.0.7)
       activesupport
-      bindata (~> 2.2.0)
+      bindata (~> 2.3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -22,7 +22,7 @@ GEM
     ast (2.2.0)
     astrolabe (1.3.1)
       parser (~> 2.2)
-    bindata (2.2.0)
+    bindata (2.3.1)
     brakeman (3.0.5)
       erubis (~> 2.6)
       fastercsv (~> 1.5)
@@ -184,4 +184,4 @@ DEPENDENCIES
   warder
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
