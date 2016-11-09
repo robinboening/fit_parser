@@ -40,4 +40,13 @@ describe FitParser do
     data = FitParser.load_file(path)
     expect(data.records).to_not be_nil
   end
+
+  #context 'garmin fenix with IQ datafields' do
+  #  it 'works' do
+      # path = 'spec/support/examples/1375670253.fit'
+  #    path = 'spec/support/examples/1379311720.fit'
+  #    data = FitParser.load_file(path)
+  #    expect(data.records).to_not be_nil
+  #  end
+  #end
 end

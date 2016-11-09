@@ -70,6 +70,7 @@ FitParser::File::Definitions.add_field(0, 2, 'garmin_product', type: :garmin_pro
 FitParser::File::Definitions.add_field(0, 3, 'serial_number', type: :uint32z)
 FitParser::File::Definitions.add_field(0, 4, 'time_created', type: :date_time)
 FitParser::File::Definitions.add_field(0, 5, 'number', type: :uint16)
+FitParser::File::Definitions.add_field(0, 8, 'product_number', type: :string)
 
 FitParser::File::Definitions.add_name(49, 'file_creator')
 FitParser::File::Definitions.add_field(49, 0, 'software_version', type: :uint16)
@@ -119,7 +120,26 @@ FitParser::File::Definitions.add_field 39, 3, 'count', type: :uint16
 FitParser::File::Definitions.add_name 2, 'device_settings'
 FitParser::File::Definitions.add_field 2, 0, 'active_time_zone', type: :uint8, scale: 1
 FitParser::File::Definitions.add_field 2, 1, 'utc_offset', type: :uint32
+FitParser::File::Definitions.add_field 2, 2, 'time_offset', type: :uint32
+FitParser::File::Definitions.add_field 2, 4, 'time_mode', type: :type_mode
 FitParser::File::Definitions.add_field 2, 5, 'time_zone_offset', type: :sint8, scale: 4, unit: 'hr'
+FitParser::File::Definitions.add_field 2, 12, 'backlight_mode', type: :backlight_mode
+FitParser::File::Definitions.add_field 2, 36, 'activity_tracker_enabled', type: :bool
+FitParser::File::Definitions.add_field 2, 39, 'clock_time', type: :date_time
+FitParser::File::Definitions.add_field 2, 40, 'pages_enabled', type: :uint16
+FitParser::File::Definitions.add_field 2, 46, 'move_alert_enabled', type: :bool
+FitParser::File::Definitions.add_field 2, 47, 'date_mode', type: :date_mode
+FitParser::File::Definitions.add_field 2, 55, 'display_orientation', type: :display_orientation
+FitParser::File::Definitions.add_field 2, 56, 'mounting_side', type: :side
+FitParser::File::Definitions.add_field 2, 57, 'default_page', type: :uint16
+FitParser::File::Definitions.add_field 2, 58, 'autosync_min_steps', type: :uint16
+FitParser::File::Definitions.add_field 2, 59, 'autosync_min_time', type: :uint16
+FitParser::File::Definitions.add_field 2, 80, 'lactate_threshold_autodetect_enabled', type: :bool
+FitParser::File::Definitions.add_field 2, 86, 'ble_auto_upload_enabled', type: :bool
+FitParser::File::Definitions.add_field 2, 89, 'auto_sync_frequency', type: :auto_sync_frequency
+FitParser::File::Definitions.add_field 2, 90, 'auto_activity_detect', type: :auto_activity_detect
+FitParser::File::Definitions.add_field 2, 94, 'number_of_screens', type: :uint8
+FitParser::File::Definitions.add_field 2, 95, 'smart_notification_display_orientation', type: :display_orientation
 
 FitParser::File::Definitions.add_name 3, 'user_profile'
 FitParser::File::Definitions.add_field 3, 254, 'message_index', type: :message_index
@@ -145,6 +165,8 @@ FitParser::File::Definitions.add_field 3, 21, 'temperature_setting', type: :disp
 FitParser::File::Definitions.add_field 3, 22, 'local_id', type: :user_local_id
 FitParser::File::Definitions.add_field 3, 23, 'global_id', type: :byte
 FitParser::File::Definitions.add_field 3, 30, 'height_setting', type: :display_measure
+FitParser::File::Definitions.add_field 3, 31, 'user_running_step_length', type: :uint16, scale: 1000, unit: 'm'
+FitParser::File::Definitions.add_field 3, 32, 'user_walking_step_length', type: :uint16, scale: 1000, unit: 'm'
 
 FitParser::File::Definitions.add_name 4, 'hrm_profile'
 FitParser::File::Definitions.add_field 4, 254, 'message_index', type: :message_index, scale: 1
@@ -195,6 +217,7 @@ FitParser::File::Definitions.add_field 6, 38, 'front_gear_num', type: :uint8z
 FitParser::File::Definitions.add_field 6, 39, 'front_gear', type: :uint8z
 FitParser::File::Definitions.add_field 6, 40, 'rear_gear_num', type: :uint8z
 FitParser::File::Definitions.add_field 6, 41, 'rear_gear', type: :uint8z
+FitParser::File::Definitions.add_field 6, 44, 'shimano_di2_enabled', type: :bool
 
 FitParser::File::Definitions.add_name 7, 'zones_target'
 FitParser::File::Definitions.add_field 7, 1, 'max_heart_rate', type: :uint8, scale: 1
@@ -247,6 +270,7 @@ FitParser::File::Definitions.add_field 15, 7, 'target_value', type: :uint32, sca
 FitParser::File::Definitions.add_field 15, 8, 'recurrence', type: :goal_recurrence, scale: 1
 FitParser::File::Definitions.add_field 15, 9, 'recurrence_value', type: :uint16, scale: 1
 FitParser::File::Definitions.add_field 15, 10, 'enabled', type: :bool, scale: 1
+FitParser::File::Definitions.add_field 15, 11, 'source', type: :goal_source
 
 FitParser::File::Definitions.add_name 34, 'activity'
 FitParser::File::Definitions.add_field 34, 253, 'timestamp', type: :date_time
@@ -354,6 +378,31 @@ FitParser::File::Definitions.add_field 18, 102, 'avg_right_torque_effectiveness'
 FitParser::File::Definitions.add_field 18, 103, 'avg_left_pedal_smoothness', type: :uint8, scale: 2, unit: 'percent'
 FitParser::File::Definitions.add_field 18, 104, 'avg_right_pedal_smoothness', type: :uint8, scale: 2, unit: 'percent'
 FitParser::File::Definitions.add_field 18, 105, 'avg_combined_pedal_smoothness', type: :uint8, scale: 2, unit: 'percent'
+FitParser::File::Definitions.add_field 18, 111, 'sport_index', type: :uint8
+FitParser::File::Definitions.add_field 18, 112, 'time_standing', type: :uint32, scale: 1000, units: 's'
+FitParser::File::Definitions.add_field 18, 113, 'stand_count', type: :uint16
+FitParser::File::Definitions.add_field 18, 114, 'avg_left_pco', type: :sint8, units: 'mm'
+FitParser::File::Definitions.add_field 18, 115, 'avg_right_pco', type: :sint8, units: 'mm'
+FitParser::File::Definitions.add_field 18, 116, 'avg_left_power_phase', type: :uint8, scale: 0.7111111, units: 'degrees'
+FitParser::File::Definitions.add_field 18, 117, 'avg_left_power_phase_peak', type: :uint8, scale: 0.7111111, units: 'degrees'
+FitParser::File::Definitions.add_field 18, 118, 'avg_right_power_phase', type: :uint8, scale: 0.7111111, units: 'degrees'
+FitParser::File::Definitions.add_field 18, 119, 'avg_right_power_phase_peak', type: :uint8, scale: 0.7111111, units: 'degrees'
+FitParser::File::Definitions.add_field 18, 120, 'avg_power_position', type: :uint16, units: 'watts'
+FitParser::File::Definitions.add_field 18, 121, 'max_power_position', type: :uint16, units: 'watts'
+FitParser::File::Definitions.add_field 18, 122, 'avg_cadence_position', type: :uint8, units: 'rpm'
+FitParser::File::Definitions.add_field 18, 123, 'max_cadence_position', type: :uint8, units: 'rpm'
+FitParser::File::Definitions.add_field 18, 124, 'enhanced_avg_speed', type: :uint32, scale: 1000, units: 'm/s'
+FitParser::File::Definitions.add_field 18, 125, 'enhanced_max_speed', type: :uint32, scale: 1000, units: 'm/s'
+FitParser::File::Definitions.add_field 18, 126, 'enhanced_avg_altitude', type: :uint32, scale: 5, offset: 500, units: 'm'
+FitParser::File::Definitions.add_field 18, 127, 'enhanced_min_altitude', type: :uint32, scale: 5, offset: 500, units: 'm'
+FitParser::File::Definitions.add_field 18, 128, 'enhanced_max_altitude', type: :uint32, scale: 5, offset: 500, units: 'm'
+FitParser::File::Definitions.add_field 18, 129, 'avg_lev_motor_power', type: :uint16, units: 'watts'
+FitParser::File::Definitions.add_field 18, 130, 'max_lev_motor_power', type: :uint16, units: 'watts'
+FitParser::File::Definitions.add_field 18, 131, 'lev_battery_consumption', type: :uint8, scale: 2, units: 'percent'
+FitParser::File::Definitions.add_field 18, 132, 'avg_vertical_ratio', type: :uint16, scale: 100, units: 'percent'
+FitParser::File::Definitions.add_field 18, 133, 'avg_stance_time_balance', type: :uint16, scale: 100, units: 'percent'
+FitParser::File::Definitions.add_field 18, 134, 'avg_step_length', type: :uint16, scale: 10, units: 'mm'
+FitParser::File::Definitions.add_field 18, 137, 'total_anaerobic_training_effect', type: :uint8, scale: 10
 
 FitParser::File::Definitions.add_name 19, 'lap'
 FitParser::File::Definitions.add_field 19, 254, 'message_index', type: :message_index, scale: 1
@@ -441,6 +490,29 @@ FitParser::File::Definitions.add_field 19, 92, 'avg_right_torque_effectiveness',
 FitParser::File::Definitions.add_field 19, 93, 'avg_left_pedal_smoothness', type: :uint8, scale: 2, unit: 'percent'
 FitParser::File::Definitions.add_field 19, 94, 'avg_right_pedal_smoothness', type: :uint8, scale: 2, unit: 'percent'
 FitParser::File::Definitions.add_field 19, 95, 'avg_combined_pedal_smoothness', type: :uint8, scale: 2, unit: 'percent'
+FitParser::File::Definitions.add_field 19, 98, 'time_standing', type: :uint32, scale: 1000, unit: 's'
+FitParser::File::Definitions.add_field 19, 99, 'stand_count', type: :uint16
+FitParser::File::Definitions.add_field 19, 100, 'avg_left_pco', type: :sint8, unit: 'mm'
+FitParser::File::Definitions.add_field 19, 101, 'avg_right_pco', type: :sint8, unit: 's'
+FitParser::File::Definitions.add_field 19, 102, 'avg_left_power_phase', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 19, 103, 'avg_left_power_phase_peak', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 19, 104, 'avg_right_power_phase', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 19, 105, 'avg_right_power_phase_peak', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 19, 106, 'avg_power_position', type: :uint16, unit: 'watts'
+FitParser::File::Definitions.add_field 19, 107, 'max_power_position', type: :uint16, unit: 'watts'
+FitParser::File::Definitions.add_field 19, 108, 'avg_cadence_position', type: :uint8, unit: 'rpm'
+FitParser::File::Definitions.add_field 19, 109, 'max_cadence_position', type: :uint8, unit: 'rpm'
+FitParser::File::Definitions.add_field 19, 110, 'enhanced_avg_speed', type: :uint32, scale: 1000, unit: 'm/s'
+FitParser::File::Definitions.add_field 19, 111, 'enhanced_max_speed', type: :uint32, scale: 1000, unit: 'm/s'
+FitParser::File::Definitions.add_field 19, 112, 'enhanced_avg_altitude', type: :uint32, scale: 5, offset: 500, unit: 'm'
+FitParser::File::Definitions.add_field 19, 113, 'enhanced_min_altitude', type: :uint32, scale: 5, offset: 500, unit: 'm'
+FitParser::File::Definitions.add_field 19, 114, 'enhanced_max_altitude', type: :uint32, scale: 5, offset: 500, unit: 'm'
+FitParser::File::Definitions.add_field 19, 115, 'avg_lev_motor_power', type: :uint16, unit: 'watts'
+FitParser::File::Definitions.add_field 19, 116, 'max_lev_motor_power', type: :uint16, unit: 'watts'
+FitParser::File::Definitions.add_field 19, 117, 'lev_battery_consumption', type: :uint8, scale: 2, unit: 'percent'
+FitParser::File::Definitions.add_field 19, 118, 'avg_vertical_ratio', type: :uint16, scale: 100, unit: 'percent'
+FitParser::File::Definitions.add_field 19, 119, 'avg_stance_time_balance', type: :uint16, scale: 100, unit: 'percent'
+FitParser::File::Definitions.add_field 19, 120, 'avg_step_length', type: :uint16, scale: 10, unit: 'mm'
 
 FitParser::File::Definitions.add_name 101, 'length'
 FitParser::File::Definitions.add_field 101, 254, 'message_index', type: :message_index, scale: 1
@@ -509,6 +581,19 @@ FitParser::File::Definitions.add_field 20, 57, 'saturated_hemoglobin_percent', t
 FitParser::File::Definitions.add_field 20, 58, 'saturated_hemoglobin_percent_min', type: :uint16, scale: 10, unit: '%'
 FitParser::File::Definitions.add_field 20, 59, 'saturated_hemoglobin_percent_max', type: :uint16, scale: 10, unit: '%'
 FitParser::File::Definitions.add_field 20, 62, 'device_index', type: :device_index
+FitParser::File::Definitions.add_field 20, 67, 'left_pco', type: :sint8, unit: 'mm'
+FitParser::File::Definitions.add_field 20, 68, 'right_pco', type: :sint8, unit: 'mm'
+FitParser::File::Definitions.add_field 20, 69, 'left_power_phase', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 20, 70, 'left_power_phase_peak', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 20, 71, 'right_power_phase', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 20, 72, 'right_power_phase_peak', type: :uint8, scale: 0.7111111, unit: 'degrees'
+FitParser::File::Definitions.add_field 20, 73, 'enhanced_speed', type: :uint32, scale: 1000, unit: 'm/s'
+FitParser::File::Definitions.add_field 20, 78, 'enhanced_altitude', type: :uint32, scale: 5, offset: 500, unit: 'm'
+FitParser::File::Definitions.add_field 20, 81, 'battery_soc', type: :uint8, scale: 2, unit: 'percent'
+FitParser::File::Definitions.add_field 20, 82, 'motor_power', type: :uint16, unit: 'watts'
+FitParser::File::Definitions.add_field 20, 83, 'vertical_ratio', type: :uint16, scale: 100, unit: 'percent'
+FitParser::File::Definitions.add_field 20, 84, 'stance_time_balance', type: :uint16, scale: 100, unit: 'percent'
+FitParser::File::Definitions.add_field 20, 85, 'step_length', type: :uint16, scale: 10, unit: 'mm'
 
 FitParser::File::Definitions.add_name 21, 'event'
 FitParser::File::Definitions.add_field 21, 253, 'timestamp', type: :date_time, unit: 's'
@@ -541,6 +626,7 @@ FitParser::File::Definitions.add_field 21, 9, 'front_gear_num', type: :uint8z
 FitParser::File::Definitions.add_field 21, 10, 'front_gear', type: :uint8z
 FitParser::File::Definitions.add_field 21, 11, 'rear_gear_num', type: :uint8z
 FitParser::File::Definitions.add_field 21, 12, 'rear_gear', type: :uint8z
+FitParser::File::Definitions.add_field 21, 13, 'device_index'
 
 FitParser::File::Definitions.add_name 23, 'device_info'
 FitParser::File::Definitions.add_field 23, 253, 'timestamp', type: :date_time, scale: 1, unit: 's'
@@ -562,6 +648,7 @@ FitParser::File::Definitions.add_field 23, 20, 'ant_transmission_type', type: :u
 FitParser::File::Definitions.add_field 23, 21, 'ant_device_number', type: :uint16z
 FitParser::File::Definitions.add_field 23, 22, 'ant_network', type: :ant_network
 FitParser::File::Definitions.add_field 23, 25, 'source_type', type: :source_type
+FitParser::File::Definitions.add_field 23, 27, 'product_name', type: :string
 
 FitParser::File::Definitions.add_name 72, 'training_file'
 FitParser::File::Definitions.add_field 72, 253, 'timestamp', type: :date_time
@@ -579,6 +666,7 @@ FitParser::File::Definitions.add_name 31, 'course'
 FitParser::File::Definitions.add_field 31, 4, 'sport', type: :sport
 FitParser::File::Definitions.add_field 31, 5, 'name', type: :string
 FitParser::File::Definitions.add_field 31, 6, 'capabilities', type: :course_capabilities
+FitParser::File::Definitions.add_field 31, 7, 'sub_sport', type: :sub_sport
 
 FitParser::File::Definitions.add_name 32, 'course_point'
 FitParser::File::Definitions.add_field 32, 254, 'message_index', type: :message_index
@@ -588,6 +676,7 @@ FitParser::File::Definitions.add_field 32, 3, 'position_long', type: :sint32, sc
 FitParser::File::Definitions.add_field 32, 4, 'distance', type: :uint32, scale: 100, unit: 'm'
 FitParser::File::Definitions.add_field 32, 5, 'type', type: :course_point, scale: 1
 FitParser::File::Definitions.add_field 32, 6, 'name', type: :string
+FitParser::File::Definitions.add_field 32, 8, 'favorite', type: :bool
 
 FitParser::File::Definitions.add_name 26, 'workout'
 FitParser::File::Definitions.add_field 26, 4, 'sport', type: :sport, scale: 1
@@ -648,6 +737,7 @@ FitParser::File::Definitions.add_field 33, 3, 'sport', type: :sport
 FitParser::File::Definitions.add_field 33, 4, 'elapsed_time', type: :uint32, unit: 's'
 FitParser::File::Definitions.add_field 33, 5, 'sessions', type: :uint16
 FitParser::File::Definitions.add_field 33, 6, 'active_time', type: :uint32, unit: 's'
+FitParser::File::Definitions.add_field 33, 9, 'sport_index', type: :uint8
 
 FitParser::File::Definitions.add_name 30, 'weight_scale'
 FitParser::File::Definitions.add_field 30, 253, 'timestamp', type: :date_time, scale: 1, unit: 's'
@@ -712,7 +802,11 @@ FitParser::File::Definitions.add_field 55, 26, 'timestamp_16', type: :uint16, un
 FitParser::File::Definitions.add_field 55, 27, 'heart_rate', type: :uint8, unit: 'bpm'
 FitParser::File::Definitions.add_field 55, 28, 'intensity', type: :uint8, scale: 10
 FitParser::File::Definitions.add_field 55, 29, 'duration_min', type: :uint16, unit: 'min'
-FitParser::File::Definitions.add_field(55, 30, 'duration', type: :uint32, unit: 's')
+FitParser::File::Definitions.add_field 55, 30, 'duration', type: :uint32, unit: 's'
+FitParser::File::Definitions.add_field 55, 31, 'ascent', type: :uint32, scale: 1000, unit: 'm'
+FitParser::File::Definitions.add_field 55, 32, 'descent', type: :uint32, scale: 1000, unit: 'm'
+FitParser::File::Definitions.add_field 55, 33, 'moderate_activity_minutes', type: :uint16, unit: 'minutes'
+FitParser::File::Definitions.add_field 55, 34, 'vigorous_activity_minutes', type: :uint16, unit: 'minutes'
 
 FitParser::File::Definitions.add_name(145, 'memo_glob')
 FitParser::File::Definitions.add_field(145, 250, 'part_index', type: :uint32)

@@ -72,6 +72,12 @@ module FitParser
             build_int_type 32, false
           when 13 # array of bytes
             build_int_type 8, false
+          when 14 # sint64
+            build_int_type 64, true
+          when 15 # uint64
+            build_int_type 64, false
+          when 16 # uint64z
+            build_int_type 64, false
           else
             fail "Can't map base_type_number #{base_type_number} to a data type"
           end

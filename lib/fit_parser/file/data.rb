@@ -36,7 +36,7 @@ module FitParser
             code << "def #{field.name}\n"
 
             if field.scale && field.scale != 1
-              code << "scale = #{field.scale.inspect}.0\n"
+              code << "scale = #{field.scale.inspect}\n"
             else
               code << "scale = nil\n"
             end
