@@ -11,6 +11,7 @@ require 'fit_parser/file/definition'
 require 'fit_parser/file/data'
 require 'fit_parser/file/definitions'
 require 'fit_parser/version'
+require 'bindata/dsl_field_validator'
 
 module FitParser
   def self.load_file(path)

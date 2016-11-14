@@ -1,6 +1,82 @@
 module FitParser
   class File
     class Definition < BinData::Record
+      class DevField < BinData::Record
+        uint8 :field_number
+        uint8 :field_size
+        uint8 :developer_data_index
+
+        attr_accessor :base_type_number, :name, :scale
+
+        def raw_name
+          "raw_#{name}"
+        end
+
+        def dyn_data
+          nil
+        end
+
+        def type
+          case base_type_number
+          when 0 # enum
+            build_int_type 8, false
+          when 1 # sint8
+            build_int_type 8, true
+          when 2 # uint8
+            build_int_type 8, false
+          when 131 # sint16
+            build_int_type 16, true
+          when 132 # uint16
+            build_int_type 16, false
+          when 133 # sint32
+            build_int_type 32, true
+          when 134 # uint32
+            build_int_type 32, false
+          when 7 # string
+            # some cases found where string has the max field length
+            # and is therefore not null terminated
+            @length = 1
+            'string'
+          when 136 # float32
+            @length = 4
+            'float'
+          when 137 # float64
+            @length = 8
+            'double'
+          when 10 # uint8z
+            build_int_type 8, false
+          when 139 # uint16z
+            build_int_type 16, false
+          when 140 # uint32z
+            build_int_type 32, false
+          when 13 # array of bytes
+            build_int_type 8, false
+          when 142 # sint64
+            build_int_type 64, true
+          when 143 # uint64
+            build_int_type 64, false
+          when 144 # uint64z
+            build_int_type 64, false
+          else
+            fail "Can't map base_type_number #{base_type_number} to a data type"
+          end
+        end
+        alias :real_type :type
+
+        # return the length in byte of the given type
+        def length
+          @length
+        end
+
+        private
+
+        def build_int_type(length, signed)
+          # @length is in byte not in bits, so divide by 8
+          @length = length / 8
+          (signed ? '' : 'u') << 'int' << length.to_s
+        end
+      end
+
       class Field < BinData::Record
         hide :reserved_bits
 
@@ -110,6 +186,21 @@ module FitParser
       end
       bit8 :field_count
       array :fields_arr, type: Field, initial_length: :field_count
+      bit8 :dev_field_count, :onlyif => :dev_data_flag?
+      array :dev_fields_arr, type: DevField, initial_length: :dev_field_count, :onlyif => :dev_data_flag?
+
+      def self.attributes
+        @attributes ||= Hash.new { |h, k| h[k] = {} }
+      end
+
+      def self.attributes=(val)
+        @attributes = val
+      end
+
+      def self.read(io, attrs = {})
+        self.attributes = attrs
+        super(io)
+      end
 
       def endianness
         architecture.snapshot == 0 ? :little : :big
@@ -117,6 +208,12 @@ module FitParser
 
       def record_type
         :definition
+      end
+
+      def dev_data_flag?
+        dev_data_flag = Definition.attributes[:dev_data_flag]
+        return true if dev_data_flag && dev_data_flag == 1
+        false
       end
     end
   end

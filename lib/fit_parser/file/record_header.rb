@@ -6,7 +6,8 @@ module FitParser
       bit1 :header_type
 
       bit1 :message_type, :onlyif => :normal?
-      bit2 :reserved_bits, :onlyif => :normal?
+      bit1 :dev_data_flag, :onlyif => :normal?
+      bit1 :reserved_bits, :onlyif => :normal?
 
       choice :local_message_type, :selection => :header_type do
         bit4 0
