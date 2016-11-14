@@ -20,6 +20,7 @@ describe FitParser::File::Data do
         @fields = FitParser::File::Definitions.fields
         @dyn_fields = FitParser::File::Definitions.dyn_fields
         # force a fake definition for scaling of arrays
+        FitParser::File::Definitions.fields[2].delete(2)
         FitParser::File::Definitions.add_field(
           2, 2, 'field_array', type: 6, scale: 10, offset: 0
         )
@@ -42,7 +43,7 @@ describe FitParser::File::Data do
       it 'reads the entire record' do
         # read first the record definition
         expect(@result.raw_field_array).to be == [123_456_789, 987_654_321]
-        expect(@result.raw_field_4).to be == [1, 3]
+        expect(@result.raw_time_mode).to be == [1, 3]
         expect(@result.raw_field_8).to be == 1539
         expect(@result.raw_active_time_zone).to be == 0
       end
@@ -53,8 +54,8 @@ describe FitParser::File::Data do
       end
 
       it 'does not apply the scale equal to 1 for arrays' do
-        expect(@result.raw_field_4).to be == [1, 3]
-        expect(@result.field_4.to_s).to be_eql('[1, 3]')
+        expect(@result.raw_time_mode).to be == [1, 3]
+        expect(@result.time_mode.to_s).to be_eql('[1, 3]')
       end
 
       it 'does apply scale on each element of an array' do
