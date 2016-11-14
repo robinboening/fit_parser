@@ -64,7 +64,7 @@ module FitParser
           definition.dev_fields_arr.each do |field|
             data = dev_definitions[field[:developer_data_index].to_s][field[:field_number].to_s]
             field.base_type_number = data[:raw_field_2]
-            field.name = data[:raw_field_3]
+            field.name = data[:raw_field_3].downcase.gsub(' ', '_')
             field.scale = data[:raw_field_6] && data[:raw_field_6] != 255 ? data[:raw_field_6] : nil
             code = ''
 

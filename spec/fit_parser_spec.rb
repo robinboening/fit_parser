@@ -53,5 +53,17 @@ describe FitParser do
       data = FitParser.load_file(path)
       expect(data.records).to_not be_nil
     end
+
+    it 'works 6AUI5200.FIT' do
+      path = 'spec/support/examples/6AUI5200.fit'
+      data = FitParser.load_file(path)
+      expect(data.records).to_not be_nil
+    end
+
+    it 'works 1426768070-2.fit' do
+      path = 'spec/support/examples/1426768070-2.fit'
+      data = FitParser.load_file(path)
+      expect(data.records).to_not be_nil
+    end
   end
 end

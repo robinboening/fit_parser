@@ -20,42 +20,42 @@ module FitParser
           case base_type_number
           when 0 # enum
             build_int_type 8, false
-          when 1
+          when 1 # sint8
             build_int_type 8, true
-          when 2
+          when 2 # uint8
             build_int_type 8, false
-          when 3
+          when 131 # sint16
             build_int_type 16, true
-          when 4
+          when 132 # uint16
             build_int_type 16, false
-          when 5
+          when 133 # sint32
             build_int_type 32, true
-          when 6
+          when 134 # uint32
             build_int_type 32, false
-          when 7
+          when 7 # string
             # some cases found where string has the max field length
             # and is therefore not null terminated
             @length = 1
             'string'
-          when 8
+          when 136 # float32
             @length = 4
             'float'
-          when 9
+          when 137 # float64
             @length = 8
             'double'
           when 10 # uint8z
             build_int_type 8, false
-          when 11 # uint16z
+          when 139 # uint16z
             build_int_type 16, false
-          when 12 # uint32z
+          when 140 # uint32z
             build_int_type 32, false
           when 13 # array of bytes
             build_int_type 8, false
-          when 14 # sint64
+          when 142 # sint64
             build_int_type 64, true
-          when 15 # uint64
+          when 143 # uint64
             build_int_type 64, false
-          when 16 # uint64z
+          when 144 # uint64z
             build_int_type 64, false
           else
             fail "Can't map base_type_number #{base_type_number} to a data type"
