@@ -73,14 +73,14 @@ module FitParser
               code << "array :#{field.raw_name}, :type => :#{field.type}, :initial_length => #{field.field_size/field.length}\n"
             else
               # string are not null terminated when they have exactly the lenght of the field
-              code << "#{field.type} :#{field.raw_name}"
+              code << "#{field.type} :#{field.raw_name.gsub('/', '_')}"
               if field.type == 'string'
                 code << ", :read_length => #{field.field_size}, :trim_padding => true"
               end
               code << "\n"
             end
 
-            code << "def #{field.name}\n"
+            code << "def #{field.name.gsub('/', '_')}\n"
 
             if field.scale && field.scale != 1
               scale = field.scale
@@ -98,8 +98,9 @@ module FitParser
             else
               code << "dyn = nil\n"
             end
+
             code << <<-RUBY
-                get_value #{field.raw_name}.snapshot, '#{field.real_type}', scale, dyn
+                get_value #{field.raw_name.gsub('/', '_')}.snapshot, '#{field.real_type}', scale, dyn
               end
             RUBY
 
