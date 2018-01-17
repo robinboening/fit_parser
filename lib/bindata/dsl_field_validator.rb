@@ -7,7 +7,7 @@ module BinData
       def ensure_valid_name(name)
         if name and not option?(:fieldnames_are_values)
           if malformed_name?(name)
-            raise NameError.new("", name), "field '#{name}' is an illegal fieldname"
+            # raise NameError.new("", name), "field '#{name}' is an illegal fieldname"
           end
 
           if duplicate_name?(name)
