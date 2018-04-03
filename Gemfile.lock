@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fit_parser (1.0.5)
+    fit_parser (1.0.6)
       activesupport
       bindata (= 2.2.0)
 
