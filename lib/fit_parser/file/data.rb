@@ -64,7 +64,7 @@ module FitParser
           definition.dev_fields_arr.each do |field|
             data = dev_definitions[field[:developer_data_index].to_s][field[:field_number].to_s]
             field.base_type_number = data[:raw_field_2]
-            field.name = data[:raw_field_3].downcase.gsub(' ', '_').gsub('.', '')
+            field.name = data[:raw_field_3].downcase.gsub(' ', '_').gsub('.', '').gsub('%', '')
             field.scale = data[:raw_field_6] && data[:raw_field_6] != 255 ? data[:raw_field_6] : nil
             code = ''
 
@@ -73,14 +73,14 @@ module FitParser
               code << "array :#{field.raw_name}, :type => :#{field.type}, :initial_length => #{field.field_size/field.length}\n"
             else
               # string are not null terminated when they have exactly the lenght of the field
-              code << "#{field.type} :#{field.raw_name.gsub('/', '_').gsub('+', '')}"
+              code << "#{field.type} :#{field.raw_name.gsub('/', '_').gsub('+', '').gsub('%', '')}"
               if field.type == 'string'
                 code << ", :read_length => #{field.field_size}, :trim_padding => true"
               end
               code << "\n"
             end
 
-            code << "def #{field.name.gsub('/', '_').gsub('+', '')}\n"
+            code << "def #{field.name.gsub('/', '_').gsub('+', '').gsub('%', '')}\n"
 
             if field.scale && field.scale != 1
               scale = field.scale
@@ -100,7 +100,7 @@ module FitParser
             end
 
             code << <<-RUBY
-                get_value #{field.raw_name.gsub('/', '_')}.snapshot, '#{field.real_type}', scale, dyn
+                get_value #{field.raw_name.gsub('/', '_').gsub('%', '')}.snapshot, '#{field.real_type}', scale, dyn
               end
             RUBY
 
