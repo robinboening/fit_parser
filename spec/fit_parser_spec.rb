@@ -133,4 +133,10 @@ describe FitParser do
     data = FitParser.load_file(path)
     expect(data.records).to_not be_nil
   end
+
+  it 'works 23489915119.fit' do
+    path = 'spec/support/examples/file/23489915119.fit'
+    data = FitParser.load_file(path)
+    expect(data.records).to_not be_nil
+  end
 end
