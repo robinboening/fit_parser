@@ -62,6 +62,7 @@ module FitParser
           end
 
           definition.dev_fields_arr.each do |field|
+            next unless dev_definitions
             developer_data = dev_definitions[field[:developer_data_index].to_s]
             next unless developer_data
             data = developer_data[field[:field_number].to_s]
@@ -82,7 +83,7 @@ module FitParser
               code << "\n"
             end
 
-            code << "def #{field.name.gsub('/', '_').gsub('+', '').gsub('%', '')}\n"
+            code << "define_method \"#{field.name}\" do\n"
 
             if field.scale && field.scale != 1
               scale = field.scale
@@ -102,7 +103,7 @@ module FitParser
             end
 
             code << <<-RUBY
-                get_value #{field.raw_name.gsub('/', '_').gsub('%', '')}.snapshot, '#{field.real_type}', scale, dyn
+                get_value #{field.raw_name}.snapshot, '#{field.real_type}', scale, dyn
               end
             RUBY
 
