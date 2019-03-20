@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fit_parser (1.0.8)
+    fit_parser (1.0.9)
       activesupport
       bindata (= 2.2.0)
 
@@ -168,4 +168,4 @@ DEPENDENCIES
   warder
 
 BUNDLED WITH
-   1.16.1
+   1.17.2
