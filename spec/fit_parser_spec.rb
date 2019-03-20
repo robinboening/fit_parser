@@ -73,7 +73,7 @@ describe FitParser do
     end
 
     it 'works 6AUI5200.FIT' do
-      path = 'spec/support/examples/6AUI5200.fit'
+      path = 'spec/support/examples/6AUI5200.FIT'
       data = FitParser.load_file(path)
       expect(data.records).to_not be_nil
     end
