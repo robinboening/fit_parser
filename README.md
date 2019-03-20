@@ -1,5 +1,7 @@
 # FitParser
 
+[![Build Status](https://travis-ci.com/zhublik/fit_parser.svg?branch=master)](https://travis-ci.com/zhublik/fit_parser)
+
 ## Example usage
 
 ```ruby
