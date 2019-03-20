@@ -104,6 +104,19 @@ describe FitParser do
     expect(data.records).to_not be_nil
   end
 
+  it 'works 31675356730' do
+    path = 'spec/support/examples/file/31675356730'
+    data = FitParser.load_file(path)
+    expect(data.records).to_not be_nil
+  end
+
+  it 'works for suunto' do
+    Dir.glob('spec/support/examples/suunto-app/*.fit').each do |f|
+      data = FitParser.load_file(f)
+      expect(data.records).to_not be_nil
+    end
+  end
+
   it 'works 7420309810' do
     path = 'spec/support/examples/file/7420309810'
     data = FitParser.load_file(path)
