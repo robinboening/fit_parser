@@ -22,13 +22,14 @@ module FitParser
 
           definition.fields_arr.each do |field|
             code = ''
+            field_raw_name_sanitized = field.raw_name.gsub('/', '_').gsub('+', '').gsub('%', '').gsub('-', '')
 
             # in case the field size is a multiple of the field length, we must build an array
             if field.type != 'string' && field.size > field.length
-              code << "array :#{field.raw_name}, :type => :#{field.type}, :initial_length => #{field.size/field.length}\n"
+              code << "array :#{field_raw_name_sanitized}, :type => :#{field.type}, :initial_length => #{field.size/field.length}\n"
             else
               # string are not null terminated when they have exactly the lenght of the field
-              code << "#{field.type} :#{field.raw_name}"
+              code << "#{field.type} :#{field_raw_name_sanitized}"
               if field.type == 'string'
                 code << ", :read_length => #{field.size}, :trim_padding => true"
               end
@@ -54,7 +55,7 @@ module FitParser
               code << "dyn = nil\n"
             end
             code << <<-RUBY
-                get_value #{field.raw_name}.snapshot, '#{field.real_type}', scale, dyn
+                get_value #{field_raw_name_sanitized}.snapshot, '#{field.real_type}', scale, dyn
               end
             RUBY
 
@@ -70,13 +71,14 @@ module FitParser
             field.name = data[:raw_field_3].downcase.gsub(' ', '_').gsub('.', '').gsub('%', '')
             field.scale = data[:raw_field_6] && data[:raw_field_6] != 255 ? data[:raw_field_6] : nil
             code = ''
+            field_raw_name_sanitized = field.raw_name.gsub('/', '_').gsub('+', '').gsub('%', '').gsub('-', '')
 
             # in case the field size is a multiple of the field length, we must build an array
             if field.type != 'string' && field.field_size > field.length
-              code << "array :#{field.raw_name}, :type => :#{field.type}, :initial_length => #{field.field_size/field.length}\n"
+              code << "array :#{field_raw_name_sanitized}, :type => :#{field.type}, :initial_length => #{field.field_size/field.length}\n"
             else
               # string are not null terminated when they have exactly the lenght of the field
-              code << "#{field.type} :#{field.raw_name.gsub('/', '_').gsub('+', '').gsub('%', '')}"
+              code << "#{field.type} :#{field_raw_name_sanitized}"
               if field.type == 'string'
                 code << ", :read_length => #{field.field_size}, :trim_padding => true"
               end
@@ -103,7 +105,7 @@ module FitParser
             end
 
             code << <<-RUBY
-                get_value #{field.raw_name}.snapshot, '#{field.real_type}', scale, dyn
+                get_value #{field_raw_name_sanitized}.snapshot, '#{field.real_type}', scale, dyn
               end
             RUBY
 
