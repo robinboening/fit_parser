@@ -1,6 +1,6 @@
 # FitParser
 
-[![Build Status](https://travis-ci.com/zhublik/fit_parser.svg?branch=master)](https://travis-ci.com/zhublik/fit_parser)
+[![Build Status](https://travis-ci.com/dimameshcharakou/fit_parser.svg?branch=master)](https://travis-ci.com/dimameshcharakou/fit_parser)
 
 ## Example usage
 
